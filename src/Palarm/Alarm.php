@@ -9,8 +9,9 @@
 namespace Palarm;
 
 use Palarm\Collector\CollectorInterface;
+use Palarm\Sender\SenderInterface;
 use Palarm\Strategy\AbstractStrategy;
-use Palarm\Sender\Sender;
+use Palarm\Sender\Send;
 
 class Alarm
 {
@@ -25,7 +26,7 @@ class Alarm
         $this->collector = $collector;
         $this->strategy = $strategy;
 
-        $this->sender = new Sender();
+        $this->sender = new Send();
     }
 
     /**
@@ -36,9 +37,7 @@ class Alarm
      *
      * 为何可直接通过策略层?
      * 在数据提取过程中, 可能会出现提取过程中就需要发送消息, 比如:错误数据量巨大等等
-     *
-     *
-     *
+     * 所以在策略层也设置了直接通过消息的方法
      */
     public function handle()
     {
@@ -54,12 +53,7 @@ class Alarm
 
     /**
      * 执行分析策略
-     *
-     *
-     *
-     *
-     *
-     *
+     * 提取的数据集合是空不必经过策略层
      */
     protected function analyze()
     {
@@ -75,12 +69,17 @@ class Alarm
     }
 
     /**
-     *
+     * 直接通过策略层, 并发送消息
      */
     protected function straight()
     {
         $this->strategy->straight();
 
         $this->sender->send();
+    }
+
+    public function addSender($level, SenderInterface $sender)
+    {
+        $this->sender->addSender($level, $sender);
     }
 }

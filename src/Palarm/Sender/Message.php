@@ -10,10 +10,19 @@ namespace Palarm\Sender;
 
 class Message
 {
+    /**
+     * @var string|int 消息主体
+     */
     private $message;
 
+    /**
+     * @var array $context 消息上下文 可携带变量等等
+     */
     private $context;
 
+    /**
+     * @var int 消息等级(MessageLevel中定义值)
+     */
     private $level;
 
     public static $instance;
@@ -22,6 +31,13 @@ class Message
     {
     }
 
+    /**
+     * single instance
+     *
+     * @param $message
+     * @param $level
+     * @param array $context
+     */
     public static function make($message, $level, $context = [])
     {
         $instance = new self();
@@ -34,6 +50,8 @@ class Message
     }
 
     /**
+     * Get $instance
+     *
      * @return self
      */
     public static function getInstance()
@@ -42,31 +60,9 @@ class Message
     }
 
     /**
-     * @param mixed $context
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-    }
-
-    /**
-     * @param mixed $level
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
-    }
-
-    /**
-     * @param mixed $message
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-    }
-
-    /**
-     * @return mixed
+     * Get context
+     *
+     * @return array
      */
     public function getContext()
     {
@@ -74,7 +70,9 @@ class Message
     }
 
     /**
-     * @return mixed
+     * Get level
+     *
+     * @return int
      */
     public function getLevel()
     {
@@ -82,7 +80,9 @@ class Message
     }
 
     /**
-     * @return mixed
+     * Get message
+     *
+     * @return string|int
      */
     public function getMessage()
     {

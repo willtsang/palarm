@@ -10,5 +10,5 @@ namespace Palarm\Sender;
 
 interface SenderInterface
 {
-
+    public function send(Message $message);
 }

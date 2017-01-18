@@ -10,7 +10,6 @@ namespace Palarm\Sender;
 
 class MessageLevel
 {
-    const DEBUG = 1;
     const INFO = 2;
     const WARNING = 3;
     const ERROR = 4;

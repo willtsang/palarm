@@ -10,5 +10,8 @@ namespace Palarm\Sender;
 
 class MailSender implements SenderInterface
 {
-
+    public function send(Message $message)
+    {
+       ;
+    }
 }
