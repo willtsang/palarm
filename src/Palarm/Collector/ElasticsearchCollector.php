@@ -176,7 +176,8 @@ class ElasticsearchCollector implements CollectorInterface
                       "range":{
                         "@timestamp":{
                           "gte":%d,
-                          "lt":%d
+                          "lt":%d,
+                          "format": "epoch_millis"
                         }
                       }
                     }

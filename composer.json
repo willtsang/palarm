@@ -1,0 +1,20 @@
+{
+    "name": "palarm/palarm",
+    "description": "php alarm system",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Will Tsang",
+            "email": "z1298703836@sina.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+          "Palarm": "src"
+        }
+    },
+    "require": {
+        "php": ">=5.5.0"
+    }
+}
