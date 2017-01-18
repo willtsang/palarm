@@ -21,6 +21,18 @@ class Alarm
     private $collector;
     private $strategy;
 
+    /*
+     * ==========================================
+     * Alarm类封装了收集器, 策略, 消息通知的相关逻辑
+     * 收集器, 策略, 通知 三者相互独立, 可自生封装传它
+     * 们之间的工作逻辑;
+     *
+     * Alarm类提供了添加消息通知类接口, 由此可扩展消息
+     * 通知;
+     * ==========================================
+     */
+
+
     public function __construct(CollectorInterface $collector, AbstractStrategy $strategy)
     {
         $this->collector = $collector;
@@ -78,6 +90,12 @@ class Alarm
         $this->sender->send();
     }
 
+    /**
+     * 添加自定义通知类接口
+     *
+     * @param $level
+     * @param SenderInterface $sender
+     */
     public function addSender($level, SenderInterface $sender)
     {
         $this->sender->addSender($level, $sender);
