@@ -58,6 +58,7 @@ class ElasticsearchCollector implements CollectorInterface
         }
 
         $this->collection = $this->getDataInFiveMinutes($nowTime);
+        $this->collection->setPayload($nowTime - 5* 60);
     }
 
     /**
@@ -84,14 +85,14 @@ class ElasticsearchCollector implements CollectorInterface
      */
     protected function getCountInFiveMinutes($nowTime)
     {
-        $uri = '/index-expert/_count';
+        $uri = '/log-request/_count';
 
         $body = $this->getSearchBody($nowTime);
 
         if ($this->client instanceof \GuzzleHttp\Client) {
             $response = $this->client->post($uri, ['body' => $body]);
 
-            $content = $response->getBody()->getContent();
+            $content = $response->getBody()->getContents();
 
             $result = json_decode($content, true);
 
@@ -112,7 +113,7 @@ class ElasticsearchCollector implements CollectorInterface
      */
     protected function getDataInFiveMinutes($nowTime)
     {
-        $uri = '/index-expert/_search';
+        $uri = '/log-request/_search';
 
         $body = $this->getSearchBody($nowTime);
 
@@ -120,7 +121,7 @@ class ElasticsearchCollector implements CollectorInterface
         if ($this->client instanceof \GuzzleHttp\Client) {
             $response = $this->client->post($uri, ['body' => $body]);
 
-            $content = $response->getBody()->getContent();
+            $content = $response->getBody()->getContents();
 
             $result = json_decode($content, true);
 
@@ -128,7 +129,7 @@ class ElasticsearchCollector implements CollectorInterface
                 throw new \RuntimeException('Can not get data of search');
             }
 
-            $result = $result['hits']['hist'];
+            $result = $result['hits']['hits'];
 
             $collection = new Collection();
 
@@ -136,13 +137,13 @@ class ElasticsearchCollector implements CollectorInterface
 
                 $record = new RequestTimeRecord(
                     $value['_source']['time'],
-                    $value['_source']['requestTime']
+                    strtotime($value['_source']['requestTime'])
                 );
 
                 $collection->add($record);
             }
 
-            $this->collection = $collection;
+            return $collection;
         }
     }
 

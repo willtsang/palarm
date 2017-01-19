@@ -15,8 +15,8 @@ use Palarm\Sender\Send;
 
 class Alarm
 {
-    const VERSION = '1.0.0';
-    const VERSION_ID = 10000;
+    const VERSION = '1.0.1';
+    const VERSION_ID = 10001;
 
     private $collector;
     private $strategy;
