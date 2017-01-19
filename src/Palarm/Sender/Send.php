@@ -26,7 +26,6 @@ class Send
      */
 
 
-
     /**
      * 发送消息
      */
@@ -35,7 +34,7 @@ class Send
         $message = Message::getInstance();
 
         if (empty($message)) {
-            throw new \InvalidArgumentException('Message Instance have not be set');
+            return;
         }
 
         $sender = $this->factory($message->getLevel());

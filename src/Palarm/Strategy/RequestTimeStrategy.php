@@ -12,18 +12,9 @@ use Palarm\Record\Collection;
 use Palarm\Record\RequestTimeRecord;
 use Palarm\Sender\Message;
 use Palarm\Sender\MessageLevel;
-use Palarm\Sender\Sender;
 
 class RequestTimeStrategy extends AbstractStrategy
 {
-
-    private $sender;
-
-    public function __construct()
-    {
-        $this->sender = new Sender();
-    }
-
     /**
      * @param Collection|RequestTimeRecord[] $collection
      */
@@ -78,7 +69,14 @@ class RequestTimeStrategy extends AbstractStrategy
         $twoMinuteLevel = $this->twoMinuteLevel($twoMinuteScore);
         $fiveMinuteLevel = $this->fiveMinuteLevel($fiveMinuteScore);
 
-        $this->createMessage($oneMinuteLevel, $twoMinuteLevel, $fiveMinuteLevel);
+        $maxLevel = max($oneMinuteLevel, $twoMinuteLevel, $fiveMinuteLevel);
+
+
+        if ($maxLevel <= 2) {
+            return ;
+        }
+
+        $this->createMessage($maxLevel);
     }
 
     /**
@@ -132,7 +130,7 @@ class RequestTimeStrategy extends AbstractStrategy
         } elseif ($oneMinuteScore > 20) {
             $oneMinuteLevel = MessageLevel::INFO;
         } else {
-            $oneMinuteLevel = MessageLevel::INFO;
+            $oneMinuteLevel = 0;
         }
 
         return $oneMinuteLevel;
@@ -149,7 +147,7 @@ class RequestTimeStrategy extends AbstractStrategy
         } elseif ($twoMinuteScore > 30) {
             $twoMinuteScore = MessageLevel::INFO;
         } else {
-            $twoMinuteScore = MessageLevel::INFO;
+            $twoMinuteScore = 0;
         }
 
         return $twoMinuteScore;
@@ -166,18 +164,21 @@ class RequestTimeStrategy extends AbstractStrategy
         } elseif ($fiveMinuteScore > 80) {
             $fiveMinuteScore = MessageLevel::INFO;
         } else {
-            $fiveMinuteScore = MessageLevel::INFO;
+            $fiveMinuteScore = 0;
         }
 
         return $fiveMinuteScore;
     }
 
-    protected function createMessage($oneMinuteLevel, $twoMinuteLevel, $fiveMinuteLevel)
+    /**
+     * 创建消息
+     *
+     * @param $maxLevel
+     */
+    protected function createMessage($maxLevel)
     {
         $message = '5分钟内的请求有点慢';
 
-        $messageLevel = max($oneMinuteLevel, $twoMinuteLevel, $fiveMinuteLevel);
-
-        Message::make($message, $messageLevel);
+        Message::make($message, $maxLevel);
     }
 }
