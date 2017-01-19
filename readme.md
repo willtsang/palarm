@@ -8,6 +8,8 @@ Palarm是一个用php编写, 简单,可扩展的报警系统;
 
 提取逻辑由三个主要方法构成
 
+    <?php
+    
     namespace Palarm\Collector;
     
     use Palarm\Record\Collection;
@@ -38,6 +40,8 @@ Palarm是一个用php编写, 简单,可扩展的报警系统;
 策略会生成一定的消息实例
 
 
+    <?php
+    
     namespace Palarm\Strategy;
     
     use Palarm\Record\Collection;
