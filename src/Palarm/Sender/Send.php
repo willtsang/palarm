@@ -11,10 +11,10 @@ namespace Palarm\Sender;
 class Send
 {
     private $sendMapping = [
-        MessageLevel::ERROR => MailSender::class,
-        MessageLevel::WARNING => MailSender::class,
-        MessageLevel::FATAL => MailSender::class,
-        MessageLevel::INFO => MailSender::class,
+        MessageLevel::ERROR => NullSender::class,
+        MessageLevel::WARNING => NullSender::class,
+        MessageLevel::FATAL => NullSender::class,
+        MessageLevel::INFO => NullSender::class,
     ];
 
     /*
@@ -39,6 +39,14 @@ class Send
 
         $sender = $this->factory($message->getLevel());
 
+        // send strategy
+        // 同一通知:
+        // 上一封通知的十分钟内不再发相同消息提示, 但可发送等级更高的提示
+        // 第二封与第三封间隔二十成分钟, 等级更高可发
+        // 第三封与第四封间隔四十分钟, 等级更高可发
+        // 第四封与第五封间隔八十分钟, 等级更高可发
+        // 直到间隔超过八小时, 则重新开始
+
         $sender->send($message);
     }
 
@@ -53,6 +61,10 @@ class Send
     protected function factory($messageLevel)
     {
         $className = $this->sendMapping[$messageLevel];
+
+        if (is_object($className)) {
+            return $className;
+        }
 
         return new $className();
     }
