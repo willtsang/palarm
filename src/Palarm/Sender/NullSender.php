@@ -2,16 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: will
- * Date: 2017/1/17
- * Time: 18:59
+ * Date: 2017/1/19
+ * Time: 15:10
  */
 
 namespace Palarm\Sender;
 
-class MailSender implements SenderInterface
+class NullSender implements SenderInterface
 {
+
     public function send(Message $message)
     {
-       ;
+        return ;
     }
 }

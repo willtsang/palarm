@@ -61,7 +61,7 @@ class RequestTimeStrategy extends AbstractStrategy
             $fiveMinuteScore += $this->getScore($item->getTime());
 
             if ($fiveMinuteScore > 200) {
-               break;
+                break;
             }
         }
 
@@ -71,12 +71,22 @@ class RequestTimeStrategy extends AbstractStrategy
 
         $maxLevel = max($oneMinuteLevel, $twoMinuteLevel, $fiveMinuteLevel);
 
+        echo 'debug' . 'maxLevel is ' . $maxLevel . "\n";
 
-        if ($maxLevel <= 2) {
+        if ($maxLevel < 2) {
+            $this->alarm = false;
             return ;
         }
 
         $this->createMessage($maxLevel);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function needAlarm()
+    {
+        return $this->alarm;
     }
 
     /**

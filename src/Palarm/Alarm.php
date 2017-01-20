@@ -56,8 +56,10 @@ class Alarm
         $this->collector->collect();
 
         if ($this->collector->isStraight()) {
+            echo 'debug' . 'straight' . "\n";
             $this->straight();
         } else {
+            echo 'debug' . 'analyze start ' . "\n";
             $this->analyze();
         }
     }
@@ -72,12 +74,15 @@ class Alarm
         $collection = $this->collector->getCollection();
 
         if (empty($collection)) {
+            echo 'debug' . 'collection is empty' . "\n";
             return;
         }
 
         $this->strategy->analyze($collection);
 
-        $this->sender->send();
+        if ($this->strategy->needAlarm()) {
+            $this->sender->send();
+        }
     }
 
     /**

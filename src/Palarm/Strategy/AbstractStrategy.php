@@ -13,6 +13,11 @@ use Palarm\Record\Collection;
 abstract class AbstractStrategy
 {
 
+    /**
+     * @var boolean 是否报警
+     */
+    protected $alarm = true;
+
     /* ===================================================
      * 策略层的上一层是数据提取收集层
      *
@@ -33,6 +38,11 @@ abstract class AbstractStrategy
     {
         throw new \LogicException('You Must Realize This Method');
     }
+
+    /**
+     * @return boolean
+     */
+    abstract public function needAlarm();
 
     /**
      * 执行策略

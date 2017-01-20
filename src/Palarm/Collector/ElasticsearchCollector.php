@@ -15,12 +15,12 @@ use Palarm\Record\RequestTimeRecord;
 class ElasticsearchCollector implements CollectorInterface
 {
     /*
-     * =============
-     *
-     * 从elasticsearch中获取数据
-     *
-     * =============
-     */
+   * =====================================
+   *
+   * 从elasticsearch中获取数据
+   *
+   * =====================================
+   */
 
     /**
      * @var object http请求客户端
@@ -167,6 +167,16 @@ class ElasticsearchCollector implements CollectorInterface
                 "bool":{
                   "must":[
                   {
+                    "terms":{
+                      "host":[
+                      "refactorapi.daniujia.com", 
+                      "testapi.daniujia.com", 
+                      "api.daniujia.com", 
+                      "www.daniujia.com"
+                      ]
+                    }
+                  },
+                  {
                     "range":{
                       "time":{
                         "gte":300
@@ -190,7 +200,7 @@ class ElasticsearchCollector implements CollectorInterface
           "sort":[
            {"@timestamp":{"order": "asc"}}
           ],
-          "_source":["time", "requestTime"]
+          "_source":["time", "requestTime", "host"]
          }
         ';
 
